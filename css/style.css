@@ -6,110 +6,144 @@
 body {
     margin: 0;
     font-family: system-ui, -apple-system, sans-serif;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #222;
-    background-color: #f9f9f9;
+    background-color: #f8fafc;
+    color: #1e293b;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+    object-fit: cover;
+    background-color: #e2e8f0;
+}
 
-header {
-    background-color: #5b21b6; 
+/* =========================================
+   Мобільний варіант (базові стилі, до 599px)
+   ========================================= */
+.site-header {
+    background-color: #5b21b6;
     color: #ffffff;
     padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
     text-align: center;
 }
 
-header h1 {
-    margin: 0 0 1rem 0;
+.site-header h1 {
+    margin: 0;
     font-size: 2.25rem;
 }
 
-header nav a {
-    color: #38bdf8; 
+.site-header nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.site-header nav a {
+    color: #38bdf8;
     text-decoration: none;
-    margin-right: 1.5rem;
     font-weight: 600;
 }
 
-header nav a:hover {
+.site-header nav a:hover {
     text-decoration: underline;
 }
 
-
-main {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-}
-
-section {
+.filters-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 1rem;
     background: #ffffff;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    margin: 1rem;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
 }
 
-section h2 {
-    margin-top: 0;
-    color: #5b21b6;
-}
-
-
-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-}
-
-form input[type="text"] {
-    width: 100%;
+.filters-form input,
+.filters-form select,
+.filters-form button {
     padding: 0.75rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
     font-size: 1rem;
 }
 
-form input[type="text"]:focus {
+.filters-form input:focus {
     outline: none;
     border-color: #5b21b6;
 }
 
+.cards {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 16px;
+    padding: 1rem;
+}
 
-article {
+
+.game-card {
     background: #ffffff;
     padding: 1rem;
-    margin-bottom: 1rem;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-article:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+.game-card:hover {
+    box-shadow: 0 10px 15px 3px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
 }
 
-article h3 {
-    margin-top: 0;
+.game-card h3 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
     color: #1e293b;
 }
 
-article img {
-    width: 100%;
-    height: 180px; 
-    object-fit: cover;
-    border-radius: 4px;
-    background-color: #e2e8f0;
+
+/* =========================================
+   Планшет (від 600px до 1023px)
+   ========================================= */
+@media (min-width: 600px) {
+    .site-header {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .filters-form {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filters-form input {
+        flex: 1; 
+    }
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 
-footer {
-    text-align: center;
-    padding: 1.5rem;
-    background-color: #1e293b;
-    color: #94a3b8; 
-    font-size: 0.875rem;
+/* =========================================
+   Десктоп (від 1024px)
+   ========================================= */
+@media (min-width: 1024px) {
+    .layout {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+    .cards {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 }
