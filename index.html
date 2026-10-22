@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Каталог настільних ігор</title>
-    <!-- Підключення шрифтів: Nunito для заголовків, Roboto для тексту -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style-new.css">
     <script src="js/app.js" defer></script>
@@ -32,11 +31,10 @@
                 <button type="submit" class="filter-btn">Шукати</button>
             </form>
         </section>
-
-        <section class="cards">
+        <p id="games-count" style="padding: 0 1rem; font-weight: bold; color: #4f46e5;"></p>
+        <section class="cards" id="games-list">
             <article class="game-card">
                 <div class="card-image-wrapper">
-                    <!-- Надійні заглушки, які точно завантажаться -->
                     <img src="https://placehold.co/600x400/4f46e5/ffffff?text=Catan" alt="Catan">
                     <div class="player-badge">👥 3-4 гравці</div>
                 </div>
