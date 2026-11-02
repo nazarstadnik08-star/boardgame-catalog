@@ -221,3 +221,15 @@ img {
 .game-card.fits {
     border: 2px solid #10b981;
 }
+.filters-form label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+.form-error {
+    color: #E63946;
+    font-weight: 600;
+    margin: 0;
+    min-height: 1.2em;
+}
