@@ -19,45 +19,51 @@
     </header>
 
     <main class="layout">
-    <section class="filters">
-        <form id="add-game-form" class="filters-form">
-            <label for="game-title">Назва гри</label>
-            <input id="game-title" name="title" type="text" required>
+        <section class="filters">
+            <form id="add-game-form" class="filters-form">
+                <label for="game-title">Назва гри</label>
+                <input id="game-title" name="title" type="text" required>
 
-            <label for="game-min">Мінімум гравців</label>
-            <input id="game-min" name="minPlayers" type="number" min="1" required>
+                <label for="game-min">Мінімум гравців</label>
+                <input id="game-min" name="minPlayers" type="number" min="1" required>
 
-            <label for="game-max">Максимум гравців</label>
-            <input id="game-max" name="maxPlayers" type="number" min="1" required>
+                <label for="game-max">Максимум гравців</label>
+                <input id="game-max" name="maxPlayers" type="number" min="1" required>
 
-            <label for="game-genre">Жанр</label>
-            <select id="game-genre" name="genre" required>
-                <option value="">Оберіть жанр</option>
-                <option value="Стратегія">Стратегія</option>
-                <option value="Сімейна">Сімейна</option>
-                <option value="Паті-гейм">Паті-гейм</option>
-            </select>
+                <label for="game-genre">Жанр</label>
+                <select id="game-genre" name="genre" required>
+                    <option value="">Оберіть жанр</option>
+                    <option value="Стратегія">Стратегія</option>
+                    <option value="Сімейна">Сімейна</option>
+                    <option value="Паті-гейм">Паті-гейм</option>
+                </select>
 
-            <p id="form-error" class="form-error" role="alert"></p>
-            <button type="submit" class="filter-btn">Додати гру</button>
-        </form>
+                <p id="form-error" class="form-error" role="alert"></p>
+                <button type="submit" class="filter-btn">Додати гру</button>
+            </form>
 
-        <div class="filters-form">
-            <label for="players-filter">Фільтр за кількістю гравців</label>
-            <select id="players-filter">
-                <option value="">Усі</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            </select>
+            <div class="filters-form">
+                <label for="players-filter">Фільтр за кількістю гравців</label>
+                <select id="players-filter">
+                    <option value="">Усі</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+
+                <button id="refresh-btn" type="button" class="filter-btn">Оновити</button>
+            </div>
+        </section>
+
+        <div class="status-bar">
+            <p id="games-count" class="games-count"></p>
+            <p id="loading-status" class="status-message" hidden>Завантаження...</p>
+            <p id="api-error" class="form-error" role="alert"></p>
         </div>
-    </section>
 
-    <p id="games-count" style="padding: 0 1rem; font-weight: bold; color: #4f46e5;"></p>
-
-    <section class="cards" id="games-list"></section>
-</main>
+        <section class="cards" id="games-list"></section>
+    </main>
 </body>
 </html>

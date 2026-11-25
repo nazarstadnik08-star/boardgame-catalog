@@ -1,36 +1,37 @@
-// ---------- Дані (масив із ПР №6) ----------
-const games = [
-    { title: 'Catan (Колонізатори)', minPlayers: 3, maxPlayers: 4, genre: 'Стратегія',
-      description: 'Класична економічна стратегія для всієї родини. Здобувайте ресурси та розбудовуйте свої поселення.', color: '4f46e5' },
-    { title: 'Carcassonne', minPlayers: 2, maxPlayers: 5, genre: 'Сімейна',
-      description: 'Тайлоукладальна гра про розбудову середньовічних міст, доріг та монастирів.', color: '7c3aed' },
-    { title: 'Ticket to Ride', minPlayers: 2, maxPlayers: 5, genre: 'Сімейна',
-      description: "Побудуй свою залізничну імперію та з'єднай найбільші міста в захопливій подорожі.", color: '38bdf8' },
-    { title: 'Dixit', minPlayers: 3, maxPlayers: 6, genre: 'Паті-гейм',
-      description: 'Асоціативна гра з неймовірно красивими ілюстраціями, яка розвиває уяву та фантазію.', color: 'f59e0b' }
-];
+const API_URL = 'https://jsonplaceholder.typicode.com/todos?userId=1';
 
-// ---------- Елементи DOM ----------
+let games = [];
+
 const gamesList = document.querySelector('#games-list');
 const gamesCountEl = document.querySelector('#games-count');
 const form = document.querySelector('#add-game-form');
 const formError = document.querySelector('#form-error');
 const playersFilter = document.querySelector('#players-filter');
+const refreshBtn = document.querySelector('#refresh-btn');
+const loadingStatus = document.querySelector('#loading-status');
+const apiError = document.querySelector('#api-error');
 
-// null означає «усі ігри»
 let currentPlayers = null;
 
-// Чи підходить гра для заданої кількості гравців
+const CARD_COLORS = ['4f46e5', '7c3aed', '38bdf8', 'f59e0b', '10b981'];
+
 const fitsPlayers = (game, count) => count >= game.minPlayers && count <= game.maxPlayers;
 
-// Ігри, які треба показати з урахуванням фільтра
 function getVisibleGames() {
     return currentPlayers === null
         ? games
         : games.filter(game => fitsPlayers(game, currentPlayers));
 }
 
-// Створює картку повністю з DOM-вузлів, без innerHTML
+function showLoading(isLoading) {
+    loadingStatus.hidden = !isLoading;
+    refreshBtn.disabled = isLoading;
+}
+
+function showError(message) {
+    apiError.textContent = message;
+}
+
 function createCard(game) {
     const card = document.createElement('article');
     card.classList.add('game-card');
@@ -61,12 +62,15 @@ function createCard(game) {
     description.classList.add('game-description');
     description.textContent = game.description;
 
-    content.append(title, description);
+    const status = document.createElement('span');
+    status.classList.add('game-status', game.completed ? 'played' : 'not-played');
+    status.textContent = game.completed ? '✅ Вже зіграно' : '🎲 Ще не зіграно';
+
+    content.append(title, description, status);
     card.append(imageWrapper, content);
     return card;
 }
 
-// Очищає контейнер і перемальовує список
 function renderGames(list = getVisibleGames()) {
     gamesList.innerHTML = '';
 
@@ -77,7 +81,41 @@ function renderGames(list = getVisibleGames()) {
     gamesCountEl.textContent = `Ігор: ${list.length}`;
 }
 
-// Подія submit: додавання нової гри без перезавантаження
+async function loadGames() {
+    showLoading(true);
+    showError('');
+
+    try {
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+            throw new Error(`Сервер відповів кодом ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Отримані дані з API:', data);
+
+        games = data.map((item, index) => ({
+            title: item.title,
+            completed: item.completed,
+            minPlayers: 2,
+            maxPlayers: 4 + (index % 3),
+            genre: 'З каталогу API',
+            description: item.completed
+                ? 'Статус: партію в цю настільну гру вже зіграно.'
+                : 'Статус: гра ще в планах, партію не зіграно.',
+            color: CARD_COLORS[index % CARD_COLORS.length]
+        }));
+
+        renderGames();
+    } catch (error) {
+        showError('Не вдалося завантажити каталог ігор. Перевірте підключення до мережі та спробуйте ще раз.');
+        console.error('Помилка завантаження даних:', error);
+    } finally {
+        showLoading(false);
+    }
+}
+
 form.addEventListener('submit', event => {
     event.preventDefault();
     formError.textContent = '';
@@ -87,7 +125,6 @@ form.addEventListener('submit', event => {
     const maxPlayers = Number(form.elements.maxPlayers.value);
     const genre = form.elements.genre.value;
 
-    // Додаткова валідація, яка не є стандартною для HTML
     if (title === '') {
         formError.textContent = 'Назва гри не може складатися лише з пробілів';
         return;
@@ -100,6 +137,7 @@ form.addEventListener('submit', event => {
 
     games.push({
         title,
+        completed: false,
         minPlayers,
         maxPlayers,
         genre,
@@ -111,11 +149,11 @@ form.addEventListener('submit', event => {
     form.reset();
 });
 
-// Подія change: фільтрація за кількістю гравців
 playersFilter.addEventListener('change', () => {
     currentPlayers = playersFilter.value === '' ? null : Number(playersFilter.value);
     renderGames();
 });
 
-// Початковий рендер
-renderGames();
+refreshBtn.addEventListener('click', loadGames);
+
+loadGames();
