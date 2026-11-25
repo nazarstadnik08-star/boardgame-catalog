@@ -6,6 +6,7 @@
     <title>Каталог настільних ігор</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style-new.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="js/app.js" defer></script>
 </head>
 <body>
@@ -18,33 +19,33 @@
         </nav>
     </header>
 
-    <main class="layout">
+    <main id="app" class="layout">
         <section class="filters">
-            <form id="add-game-form" class="filters-form">
+            <form class="filters-form" @submit.prevent="addGame">
                 <label for="game-title">Назва гри</label>
-                <input id="game-title" name="title" type="text" required>
+                <input id="game-title" v-model="newGame.title" type="text" required>
 
                 <label for="game-min">Мінімум гравців</label>
-                <input id="game-min" name="minPlayers" type="number" min="1" required>
+                <input id="game-min" v-model.number="newGame.minPlayers" type="number" min="1" required>
 
                 <label for="game-max">Максимум гравців</label>
-                <input id="game-max" name="maxPlayers" type="number" min="1" required>
+                <input id="game-max" v-model.number="newGame.maxPlayers" type="number" min="1" required>
 
                 <label for="game-genre">Жанр</label>
-                <select id="game-genre" name="genre" required>
+                <select id="game-genre" v-model="newGame.genre" required>
                     <option value="">Оберіть жанр</option>
                     <option value="Стратегія">Стратегія</option>
                     <option value="Сімейна">Сімейна</option>
                     <option value="Паті-гейм">Паті-гейм</option>
                 </select>
 
-                <p id="form-error" class="form-error" role="alert"></p>
+                <p class="form-error" role="alert">{{ formError }}</p>
                 <button type="submit" class="filter-btn">Додати гру</button>
             </form>
 
             <div class="filters-form">
                 <label for="players-filter">Фільтр за кількістю гравців</label>
-                <select id="players-filter">
+                <select id="players-filter" v-model="currentPlayers">
                     <option value="">Усі</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -53,17 +54,40 @@
                     <option value="6">6</option>
                 </select>
 
-                <button id="refresh-btn" type="button" class="filter-btn">Оновити</button>
+                <button type="button" class="filter-btn" :disabled="isLoading" @click="loadGames">
+                    Оновити
+                </button>
             </div>
         </section>
 
         <div class="status-bar">
-            <p id="games-count" class="games-count"></p>
-            <p id="loading-status" class="status-message" hidden>Завантаження...</p>
-            <p id="api-error" class="form-error" role="alert"></p>
+            <p class="games-count">Ігор: {{ visibleGames.length }}</p>
+
+            <div v-if="selectedGenre" class="active-genre-filter">
+                <span>Обраний жанр: <strong>{{ selectedGenre }}</strong></span>
+                <button type="button" class="reset-genre-btn" @click="selectedGenre = null">
+                    Скинути жанр ✕
+                </button>
+            </div>
+
+            <p v-if="isLoading" class="status-message">Завантаження...</p>
+            <p v-if="apiError" class="form-error" role="alert">{{ apiError }}</p>
         </div>
 
-        <section class="cards" id="games-list"></section>
+        <section class="cards">
+            <game-card
+                v-for="game in visibleGames"
+                :key="game.id"
+                :title="game.title"
+                :min-players="game.minPlayers"
+                :max-players="game.maxPlayers"
+                :genre="game.genre"
+                :description="game.description"
+                :color="game.color"
+                :completed="game.completed"
+                @filter="filterByGenre"
+            ></game-card>
+        </section>
     </main>
 </body>
 </html>

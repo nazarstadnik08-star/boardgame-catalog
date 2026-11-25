@@ -275,3 +275,55 @@ img {
     background-color: #fef3c7;
     color: #92400e;
 }
+.card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.75rem;
+}
+
+.card-meta .game-status {
+    margin-top: 0;
+}
+
+.genre-badge {
+    background-color: #e0e7ff;
+    color: #3730a3;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.genre-badge:hover {
+    background-color: #c7d2fe;
+    transform: translateY(-1px);
+}
+
+.active-genre-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    color: #1e293b;
+}
+
+.reset-genre-btn {
+    background-color: #e2e8f0;
+    color: #1e293b;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.reset-genre-btn:hover {
+    background-color: #cbd5e1;
+}
